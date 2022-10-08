@@ -1,23 +1,45 @@
 import './App.scss';
 import axios from "axios";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import WeatherAppImage from './components/weatherImage';
 
 function App() {
   const [ location, setLocation ] = useState("")
   const [ weatherData, setWeatherData ] = useState({})
+  const [ moreInfo, setMoreInfo ] = useState(true)
 
   const { weather, main, name, sys } = weatherData;
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&lang=sp&units=metric&appid=85f6c2fff7a0367d175ba92897e70b9b`;
 
+  const searchInput = useRef();
+
+  const toastify = () => {
+    toast.error(`${location} no se puedo encontrar`,{
+      theme: 'colored',
+      position: "bottom-right",
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      autoClose: 2500,
+    })
+  }
+
   const searchLocation = ( event ) => {
     if ( event.key === "Enter" ){
       axios.get(url).then(( resp ) =>{
         setWeatherData(resp.data)
-        console.log(resp.data)
+        console.log(resp.data.name, resp.data)
+      })
+      .catch((err) =>{
+        toastify();
       })
       setLocation("")
+      searchInput.current.blur();
     }
   }
 
@@ -30,13 +52,14 @@ function App() {
           onKeyPress={ searchLocation }
           placeholder="Ingrese una ciudad"
           type="text"
+          ref={searchInput}
           />
         </header>
         <main>
           {!weather &&  <section className='default'>
                           <h1>Weather App</h1>
-                          <p>Desarrollada por Benjamin Zapata</p>
-                          <p>API by <a href="https://openweathermap.org">OpenWeather</a></p>
+                          <p>Desarrollada por <a href='https://www.linkedin.com/in/benjaminzapata/' target='_blank'>Benjamin Zapata</a></p>
+                          <p>API by <a href="https://openweathermap.org" target='_blank'>OpenWeather</a></p>
                           <ol>
                             <li>1. Escriba una ubicacion en el buscador</li>
                             <li>2. Presione ENTER</li>
@@ -74,6 +97,9 @@ function App() {
           }
         </footer>
       </article>
+      {weather && <aside className='moreInfoDisplay'>dasdsa</aside>}
+      {weather && <button className='moreInfoButton'>{moreInfo ? 'Mostrar menos' : 'Mostrar mas'}</button>}
+      <ToastContainer />
     </div>
   );
 }
