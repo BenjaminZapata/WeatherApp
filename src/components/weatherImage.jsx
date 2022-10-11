@@ -20,7 +20,7 @@ const WeatherAppImage = ({ main }) => {
     
     return (
         <>
-        <img className="weather__image" src={weatherImage} alt="Weather Image"/>
+        <img className="weather__image" src={weatherImage} alt="Clima actual"/>
         </>
     )
 }
