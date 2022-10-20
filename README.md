@@ -1,6 +1,7 @@
 # Weather APP 
 
 Este proyecto fue creado por [Benjamin Zapata](https://www.linkedin.com/in/benjaminzapata/), utilizando React y la API de [OpenWeather](https://openweathermap.org/).
+[Live version](https://weatherapp-benjaminzapata.netlify.app/)
 
 ## Descripción
 
