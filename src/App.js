@@ -30,17 +30,17 @@ function App() {
   }
 
   const searchLocation = ( event ) => {
-    if ( event.key === "Enter" ){
-      axios.get(url).then(( resp ) =>{
-        setWeatherData(resp.data)
-        console.log(resp.data.name, resp.data)
-      })
-      .catch((err) =>{
-        toastify();
-      })
-      setLocation("")
-      searchInput.current.blur();
-    }
+    event.preventDefault()
+    if (location === '') return
+    axios.get(url)
+    .then( (resp) => {
+      setWeatherData(resp.data)
+    })
+    .catch((err) => {
+      toastify();
+    })
+    setLocation("")
+    searchInput.current.blur()
   }
   
   const timeConverter = (UNIX) => {
@@ -98,13 +98,15 @@ function App() {
     <div className="App">
       <article className="WeatherApp">
         <header>
-          <input value={ location }
-          onChange={ event => setLocation(event.target.value) }
-          onKeyPress={ searchLocation }
-          placeholder="Ingrese una ciudad"
-          type="text"
-          ref={searchInput}
-          />
+          <form onSubmit={(e) => searchLocation(e)}>
+            <input value={ location }
+            onChange={ event => setLocation(event.target.value) }
+            placeholder="Ingrese una ciudad"
+            type="text"
+            ref={searchInput}
+            />
+            <button><img src='/img/search.png'/></button>
+          </form>
         </header>
         <main>
           {!weather &&  
@@ -114,7 +116,7 @@ function App() {
             <p>API by <a href="https://openweathermap.org" target='_blank' rel="noreferrer">OpenWeather</a></p>
             <ol>
               <li>1. Escriba una ubicacion en el buscador</li>
-              <li>2. Presione ENTER</li>
+              <li>2. Presione ENTER o aprete en la lupa</li>
               <li>3. La información aparecera en pantalla</li>
             </ol>
           </section>}
